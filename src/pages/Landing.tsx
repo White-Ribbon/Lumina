@@ -36,7 +36,7 @@ const Landing = () => {
               
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Discover technology projects across galaxies of innovation. From IoT to Blockchain, 
-                AI to Game Dev—your next coding adventure awaits.
+                AI to Game Dev—your next coding adventure awaits in Lumina.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

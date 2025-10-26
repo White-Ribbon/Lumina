@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Github, Linkedin, ExternalLink, FileText } from "lucide-react";
+import { Github, Linkedin, ExternalLink, FileText, Award, Calendar, Twitter } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MarkdownViewer from "@/components/MarkdownViewer";
@@ -8,32 +8,54 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import usersData from "@/data/users.json";
-import submissionsData from "@/data/submissions.json";
-import projectsData from "@/data/projects.json";
-import forumsData from "@/data/forums.json";
+import { useUserProfile, useUserSubmissions, useUserBadges } from "@/hooks/useApi";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Profile = () => {
   const { id } = useParams();
-  const user = usersData.find(u => u.id === id);
+  const { user: currentUser } = useAuth();
+  
+  const { data: user, loading: userLoading, error: userError } = useUserProfile(id || '');
+  const { data: submissionsData, loading: submissionsLoading } = useUserSubmissions(id);
+  const { data: userBadges, loading: badgesLoading } = useUserBadges(id || '');
 
-  if (!user) {
+  if (userLoading) {
     return (
       <div className="min-h-screen">
         <Header />
         <main className="container mx-auto px-4 py-12">
-          <h1 className="text-4xl font-bold text-center">User Not Found</h1>
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+          </div>
         </main>
         <Footer />
       </div>
     );
   }
 
-  const userSubmissions = submissionsData.filter(s => s.user_id === user.id);
-  const userPosts = [...forumsData.showcasing, ...forumsData.help].filter(
-    p => p.author_id === user.id
-  );
-  const savedProjects = projectsData.filter(p => user.saved_projects.includes(p.id));
+  if (userError || !user) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="container mx-auto px-4 py-12">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">User Not Found</h1>
+            <p className="text-muted-foreground mb-4">
+              {userError || "The user you're looking for doesn't exist."}
+            </p>
+            <Button asChild>
+              <Link to="/galaxies">Back to Explore</Link>
+            </Button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const submissions = submissionsData?.items || [];
+  const badges = userBadges || [];
+  const isOwnProfile = currentUser?.hashid === user.hashid;
 
   return (
     <div className="min-h-screen">
@@ -49,28 +71,62 @@ const Profile = () => {
           <Card className="cosmic-card p-8 mb-8">
             <div className="flex flex-col md:flex-row items-start gap-6">
               <Avatar className="w-32 h-32 border-4 border-primary/20">
-                <AvatarImage src={user.avatar_url} alt={user.name} />
-                <AvatarFallback>{user.name[0]}</AvatarFallback>
+                <AvatarImage src={user.avatar_url} alt={user.username} />
+                <AvatarFallback>{user.username[0].toUpperCase()}</AvatarFallback>
               </Avatar>
               
               <div className="flex-1">
-                <h1 className="text-4xl font-bold mb-2 glow-text">{user.name}</h1>
-                <p className="text-muted-foreground mb-4">{user.bio}</p>
+                <div className="flex items-center gap-3 mb-2">
+                  <h1 className="text-4xl font-bold glow-text">{user.username}</h1>
+                  {user.is_admin && (
+                    <Badge variant="destructive" className="text-xs">
+                      Admin
+                    </Badge>
+                  )}
+                </div>
+                <p className="text-muted-foreground mb-4">{user.bio || "No bio available"}</p>
+                
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    Joined {new Date(user.created_at).toLocaleDateString()}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Award className="w-4 h-4" />
+                    {badges.length} badges earned
+                  </div>
+                </div>
                 
                 <div className="flex gap-3">
-                  {user.github_link && (
+                  {user.socials?.github && (
                     <Button asChild variant="outline" size="sm">
-                      <a href={user.github_link} target="_blank" rel="noopener noreferrer">
+                      <a href={user.socials.github} target="_blank" rel="noopener noreferrer">
                         <Github className="w-4 h-4 mr-2" />
                         GitHub
                       </a>
                     </Button>
                   )}
-                  {user.linkedin_link && (
+                  {user.socials?.linkedin && (
                     <Button asChild variant="outline" size="sm">
-                      <a href={user.linkedin_link} target="_blank" rel="noopener noreferrer">
+                      <a href={user.socials.linkedin} target="_blank" rel="noopener noreferrer">
                         <Linkedin className="w-4 h-4 mr-2" />
                         LinkedIn
+                      </a>
+                    </Button>
+                  )}
+                  {user.socials?.twitter && (
+                    <Button asChild variant="outline" size="sm">
+                      <a href={user.socials.twitter} target="_blank" rel="noopener noreferrer">
+                        <Twitter className="w-4 h-4 mr-2" />
+                        Twitter
+                      </a>
+                    </Button>
+                  )}
+                  {user.socials?.website && (
+                    <Button asChild variant="outline" size="sm">
+                      <a href={user.socials.website} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Website
                       </a>
                     </Button>
                   )}
@@ -79,126 +135,114 @@ const Profile = () => {
             </div>
           </Card>
 
+          {/* Badges Section */}
+          {badges.length > 0 && (
+            <section className="mb-8">
+              <h2 className="text-3xl font-bold mb-6">
+                Earned <span className="glow-text">Badges</span>
+              </h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {badges.map((badge: any) => (
+                  <Card key={badge.id} className="cosmic-card p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-2xl">{badge.icon}</span>
+                      </div>
+                      <div>
+                        <h3 className="font-bold">{badge.name}</h3>
+                        <p className="text-sm text-muted-foreground">{badge.description}</p>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* My Submissions Section */}
           <section className="mb-8">
             <h2 className="text-3xl font-bold mb-6">
-              My <span className="glow-text">Submissions</span>
+              {isOwnProfile ? 'My' : 'Project'} <span className="glow-text">Submissions</span>
             </h2>
             
-            {userSubmissions.length === 0 ? (
+            {submissionsLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : submissions.length === 0 ? (
               <Card className="cosmic-card p-6 text-center text-muted-foreground">
-                No submissions yet
+                {isOwnProfile ? "No submissions yet. Start exploring projects!" : "No submissions yet."}
               </Card>
             ) : (
               <div className="grid gap-6">
-                {userSubmissions.map((submission) => {
-                  const project = projectsData.find(p => p.id === submission.project_id);
-                  return (
-                    <motion.div
-                      key={submission.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
-                      <Card className="cosmic-card p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div>
-                            <h3 className="text-xl font-bold mb-1">
-                              {project?.title || "Project"}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              Submitted on {new Date(submission.submitted_at).toLocaleDateString()}
-                            </p>
-                          </div>
-                          <Button asChild variant="outline" size="sm">
-                            <a
-                              href={submission.repo_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <ExternalLink className="w-4 h-4 mr-2" />
-                              View Repo
-                            </a>
-                          </Button>
+                {submissions.map((submission: any) => (
+                  <motion.div
+                    key={submission.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <Card className="cosmic-card p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="text-xl font-bold mb-1">
+                            Project Submission
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Submitted on {new Date(submission.submitted_at).toLocaleDateString()}
+                          </p>
+                          <Badge 
+                            variant={submission.status === 'approved' ? 'default' : 
+                                    submission.status === 'pending' ? 'secondary' : 'destructive'}
+                            className="mt-2"
+                          >
+                            {submission.status}
+                          </Badge>
                         </div>
+                        <Button asChild variant="outline" size="sm">
+                          <a
+                            href={submission.repo_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <ExternalLink className="w-4 h-4 mr-2" />
+                            View Repo
+                          </a>
+                        </Button>
+                      </div>
 
-                        <div className="bg-muted/30 rounded-lg p-4">
-                          <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
-                            <FileText className="w-4 h-4" />
-                            README
-                          </div>
-                          <MarkdownViewer content={submission.readme_md} className="text-sm" />
+                      <div className="bg-muted/30 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
+                          <FileText className="w-4 h-4" />
+                          README
                         </div>
-                      </Card>
-                    </motion.div>
-                  );
-                })}
+                        <MarkdownViewer content={submission.readme_md} className="text-sm" />
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
               </div>
             )}
           </section>
 
-          {/* My Posts Section */}
+          {/* Stats Section */}
           <section className="mb-8">
             <h2 className="text-3xl font-bold mb-6">
-              My <span className="glow-text">Posts</span>
+              <span className="glow-text">Statistics</span>
             </h2>
-            
-            {userPosts.length === 0 ? (
-              <Card className="cosmic-card p-6 text-center text-muted-foreground">
-                No posts yet
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="cosmic-card p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">{badges.length}</div>
+                <div className="text-muted-foreground">Badges Earned</div>
               </Card>
-            ) : (
-              <div className="grid gap-4">
-                {userPosts.map((post) => (
-                  <Card key={post.id} className="cosmic-card p-6 hover:border-primary/50 transition-all">
-                    <h3 className="text-xl font-bold mb-2">{post.title}</h3>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {post.tags.map((tag: string) => (
-                        <Badge key={tag} variant="outline">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <Button asChild variant="ghost" size="sm">
-                      <Link to="/forums">View in Forums</Link>
-                    </Button>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </section>
-
-          {/* Saved Projects Section */}
-          <section>
-            <h2 className="text-3xl font-bold mb-6">
-              Saved <span className="glow-text">Projects</span>
-            </h2>
-            
-            {savedProjects.length === 0 ? (
-              <Card className="cosmic-card p-6 text-center text-muted-foreground">
-                No saved projects yet
+              <Card className="cosmic-card p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">{submissions.length}</div>
+                <div className="text-muted-foreground">Projects Submitted</div>
               </Card>
-            ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {savedProjects.map((project) => (
-                  <Card key={project.id} className="cosmic-card p-6 hover:border-primary/50 transition-all">
-                    <h3 className="text-lg font-bold mb-2">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tags.slice(0, 2).map((tag: string) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <Button asChild variant="outline" size="sm" className="w-full">
-                      <Link to={`/project/${project.id}`}>View Project</Link>
-                    </Button>
-                  </Card>
-                ))}
-              </div>
-            )}
+              <Card className="cosmic-card p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">{user.unlocked_galaxies?.length || 0}</div>
+                <div className="text-muted-foreground">Galaxies Unlocked</div>
+              </Card>
+            </div>
           </section>
         </motion.div>
       </main>

@@ -11,31 +11,94 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import projectsData from "@/data/projects.json";
+import { useProject, useProjects, useProjectSubmissions } from "@/hooks/useApi";
+import { useAuth } from "@/contexts/AuthContext";
+import { apiService } from "@/services/api";
 
 const ProjectDetail = () => {
   const { id } = useParams();
-  const project = projectsData.find(p => p.id === id);
+  const { user, isAuthenticated } = useAuth();
+  
+  const { data: project, loading: projectLoading, error: projectError } = useProject(id || '');
+  const { data: relatedProjectsData } = useProjects(project?.solar_system_id);
+  const { data: submissionsData } = useProjectSubmissions(id);
+  
   const [githubUrl, setGithubUrl] = useState("");
   const [readme, setReadme] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  if (!project) {
-    return <div className="min-h-screen flex items-center justify-center">Project not found</div>;
+  if (projectLoading) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="container mx-auto px-4 py-12">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  if (projectError || !project) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="container mx-auto px-4 py-12">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
+            <p className="text-muted-foreground mb-4">
+              {projectError || "The project you're looking for doesn't exist."}
+            </p>
+            <Button asChild>
+              <Link to="/galaxies">Back to Explore</Link>
+            </Button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    toast({
-      title: "Project Submitted! 🎉",
-      description: "Your submission has been recorded successfully.",
-    });
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to submit projects.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await apiService.post('/api/submissions', {
+        project_id: project.id,
+        repo_url: githubUrl,
+        readme_md: readme,
+      });
+      
+      setSubmitted(true);
+      toast({
+        title: "Project Submitted! 🎉",
+        description: "Your submission has been recorded successfully.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Submission Failed",
+        description: error.message || "An error occurred while submitting your project.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const relatedProjects = projectsData
-    .filter(p => p.solar_system_id === project.solar_system_id && p.id !== project.id)
-    .slice(0, 3);
+  const relatedProjects = relatedProjectsData?.filter((p: any) => p.id !== project.id).slice(0, 3) || [];
+  const submissions = submissionsData?.items || [];
 
   return (
     <div className="min-h-screen">
@@ -70,7 +133,7 @@ const ProjectDetail = () => {
               </div>
 
               <div className="flex flex-wrap gap-2 mb-8">
-                {project.tags.map(tag => (
+                {project.tags.map((tag: string) => (
                   <Badge key={tag} variant="secondary">
                     {tag}
                   </Badge>
@@ -84,28 +147,70 @@ const ProjectDetail = () => {
                 </p>
               </Card>
 
-              <Card className="p-6 mb-8">
-                <h2 className="text-2xl font-bold mb-4">Learning Resources</h2>
-                <div className="space-y-3">
-                  {project.resources.map((resource, index) => (
-                    <a
-                      key={index}
-                      href={resource.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group"
-                    >
-                      <ExternalLink className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
-                      <span className="font-medium">{resource.title}</span>
-                    </a>
-                  ))}
-                </div>
-              </Card>
+              {project.resources && project.resources.length > 0 && (
+                <Card className="p-6 mb-8">
+                  <h2 className="text-2xl font-bold mb-4">Learning Resources</h2>
+                  <div className="space-y-3">
+                    {project.resources.map((resource: any, index: number) => (
+                      <a
+                        key={index}
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group"
+                      >
+                        <ExternalLink className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+                        <span className="font-medium">{resource.title}</span>
+                      </a>
+                    ))}
+                  </div>
+                </Card>
+              )}
+
+              {/* Community Submissions */}
+              {submissions.length > 0 && (
+                <Card className="p-6 mb-8">
+                  <h2 className="text-2xl font-bold mb-4">Community Submissions</h2>
+                  <div className="space-y-4">
+                    {submissions.map((submission: any) => (
+                      <div key={submission.id} className="border border-border rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-muted-foreground">
+                            Submitted by {submission.user_id}
+                          </span>
+                          <Badge 
+                            variant={submission.status === 'approved' ? 'default' : 
+                                    submission.status === 'pending' ? 'secondary' : 'destructive'}
+                          >
+                            {submission.status}
+                          </Badge>
+                        </div>
+                        <a
+                          href={submission.repo_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          <Github className="w-4 h-4 inline mr-1" />
+                          View Repository
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              )}
 
               <Card className="p-6">
                 <h2 className="text-2xl font-bold mb-4">Submit Your Implementation</h2>
                 
-                {submitted ? (
+                {!isAuthenticated ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground mb-4">Sign in to submit your project implementation</p>
+                    <Button asChild className="cosmic-button">
+                      <Link to="/auth">Sign In</Link>
+                    </Button>
+                  </div>
+                ) : submitted ? (
                   <div className="text-center py-8">
                     <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
                     <h3 className="text-xl font-bold mb-2">Submission Received!</h3>
@@ -149,9 +254,9 @@ const ProjectDetail = () => {
                       </div>
                     )}
 
-                    <Button type="submit" className="cosmic-button w-full">
+                    <Button type="submit" className="cosmic-button w-full" disabled={submitting}>
                       <Github className="mr-2 w-4 h-4" />
-                      Submit Project
+                      {submitting ? "Submitting..." : "Submit Project"}
                     </Button>
                   </form>
                 )}
@@ -163,20 +268,24 @@ const ProjectDetail = () => {
             <Card className="p-6 sticky top-24">
               <h3 className="text-xl font-bold mb-4">Related Projects</h3>
               <div className="space-y-4">
-                {relatedProjects.map((relProject) => (
-                  <Link
-                    key={relProject.id}
-                    to={`/project/${relProject.id}`}
-                    className="block p-3 rounded-lg hover:bg-muted/50 transition-colors group"
-                  >
-                    <h4 className="font-semibold mb-1 group-hover:text-primary transition-colors">
-                      {relProject.title}
-                    </h4>
-                    <p className="text-sm text-muted-foreground line-clamp-2">
-                      {relProject.description}
-                    </p>
-                  </Link>
-                ))}
+                {relatedProjects.length > 0 ? (
+                  relatedProjects.map((relProject: any) => (
+                    <Link
+                      key={relProject.id}
+                      to={`/project/${relProject.hashid}`}
+                      className="block p-3 rounded-lg hover:bg-muted/50 transition-colors group"
+                    >
+                      <h4 className="font-semibold mb-1 group-hover:text-primary transition-colors">
+                        {relProject.title}
+                      </h4>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {relProject.description}
+                      </p>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-muted-foreground text-sm">No related projects found</p>
+                )}
               </div>
             </Card>
           </div>

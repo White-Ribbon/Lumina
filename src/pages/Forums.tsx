@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MessageSquare, Plus, Flag, ThumbsUp, User } from "lucide-react";
+import { MessageSquare, Plus, Flag, User } from "lucide-react";
+import usersData from "@/data/users.json";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MarkdownViewer from "@/components/MarkdownViewer";
@@ -26,7 +27,10 @@ const Forums = () => {
     });
   };
 
-  const renderPost = (post: any, category: string) => (
+  const renderPost = (post: any, category: string) => {
+    const author = usersData.find(u => u.id === post.author_id);
+    
+    return (
     <motion.div
       key={post.id}
       initial={{ opacity: 0, y: 10 }}
@@ -40,7 +44,7 @@ const Forums = () => {
           </div>
           <div>
             <h3 className="font-bold text-lg">{post.title}</h3>
-            <p className="text-sm text-muted-foreground">by {post.author}</p>
+            <p className="text-sm text-muted-foreground">by {author?.name || "Unknown"}</p>
           </div>
         </div>
         <Button
@@ -69,7 +73,7 @@ const Forums = () => {
         <div className="border-t border-border pt-4 mt-4">
           <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
             <MessageSquare className="w-4 h-4" />
-            {post.comments.length} {post.comments.length === 1 ? "Comment" : "Comments"}
+            Comments
           </div>
           <div className="space-y-3 pl-4">
             {post.comments.map((comment: any) => (
@@ -94,7 +98,8 @@ const Forums = () => {
         </div>
       )}
     </motion.div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen">

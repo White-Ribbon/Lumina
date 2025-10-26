@@ -1,0 +1,57 @@
+[
+  {
+    "id": "user-1",
+    "name": "CosmicCoder",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=CosmicCoder",
+    "bio": "Full-stack developer passionate about IoT and blockchain. Building the future, one project at a time.",
+    "github_link": "https://github.com/cosmiccoder",
+    "linkedin_link": "https://linkedin.com/in/cosmiccoder",
+    "submissions": ["sub-1"],
+    "posts": ["post-1"],
+    "saved_projects": ["smart-home-hub", "nft-marketplace"]
+  },
+  {
+    "id": "user-2",
+    "name": "BlockchainBob",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=BlockchainBob",
+    "bio": "Web3 enthusiast and React developer. Exploring decentralized technologies.",
+    "github_link": "https://github.com/blockchainbob",
+    "linkedin_link": "https://linkedin.com/in/blockchainbob",
+    "submissions": ["sub-2"],
+    "posts": ["post-2"],
+    "saved_projects": ["nft-marketplace", "sentiment-analyzer"]
+  },
+  {
+    "id": "user-3",
+    "name": "NewbieCoder",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=NewbieCoder",
+    "bio": "Learning to code and build cool hardware projects. Always eager to learn!",
+    "github_link": "https://github.com/newbiecoder",
+    "linkedin_link": "",
+    "submissions": [],
+    "posts": ["help-1"],
+    "saved_projects": ["weather-station", "smart-home-hub"]
+  },
+  {
+    "id": "user-4",
+    "name": "StarBuilder",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=StarBuilder",
+    "bio": "Mobile app developer and hardware hacker.",
+    "github_link": "https://github.com/starbuilder",
+    "linkedin_link": "https://linkedin.com/in/starbuilder",
+    "submissions": [],
+    "posts": [],
+    "saved_projects": ["task-manager", "2d-platformer"]
+  },
+  {
+    "id": "user-5",
+    "name": "GalaxyExplorer",
+    "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=GalaxyExplorer",
+    "bio": "Game developer and creative technologist.",
+    "github_link": "https://github.com/galaxyexplorer",
+    "linkedin_link": "",
+    "submissions": [],
+    "posts": [],
+    "saved_projects": ["2d-platformer"]
+  }
+]

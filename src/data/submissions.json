@@ -1,0 +1,18 @@
+[
+  {
+    "id": "sub-1",
+    "project_id": "smart-home-hub",
+    "user_id": "user-1",
+    "repo_url": "https://github.com/cosmiccoder/smart-home-hub",
+    "readme_md": "# Smart Home Hub\n\n## Overview\nA centralized IoT control system built with Arduino and Node.js.\n\n## Features\n- Temperature & humidity monitoring\n- Smart lighting control\n- Security system integration\n- Mobile app dashboard\n\n## Tech Stack\n- Arduino Mega\n- ESP8266 WiFi module\n- DHT22 sensors\n- React Native mobile app",
+    "submitted_at": "2025-01-15T10:30:00Z"
+  },
+  {
+    "id": "sub-2",
+    "project_id": "nft-marketplace",
+    "user_id": "user-2",
+    "repo_url": "https://github.com/blockchainbob/nft-gallery",
+    "readme_md": "# NFT Marketplace\n\n## Description\nA fully decentralized NFT marketplace on Ethereum.\n\n## Key Features\n- Mint NFTs with custom metadata\n- Buy/sell with ETH\n- IPFS storage for images\n- Smart contract audited\n\n## Technologies\n- Solidity\n- Hardhat\n- React + Web3.js\n- IPFS\n\n## Live Demo\n[View Demo](https://nft-gallery.example.com)",
+    "submitted_at": "2025-01-20T14:45:00Z"
+  }
+]

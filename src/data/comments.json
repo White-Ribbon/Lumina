@@ -1,0 +1,26 @@
+[
+  {
+    "id": "c1",
+    "post_id": "post-1",
+    "parent_comment_id": null,
+    "author_id": "user-4",
+    "body_md": "This is amazing! Love the mobile integration. Did you use MQTT for notifications?",
+    "tag": "Feedback"
+  },
+  {
+    "id": "c2",
+    "post_id": "post-1",
+    "parent_comment_id": null,
+    "author_id": "user-5",
+    "body_md": "Great work! Have you considered adding light sensors too?",
+    "tag": "General Discussion"
+  },
+  {
+    "id": "ch1",
+    "post_id": "help-1",
+    "parent_comment_id": null,
+    "author_id": "user-1",
+    "body_md": "Check your wiring! DHT22 needs a 10k pullup resistor between data and VCC.",
+    "tag": "Help"
+  }
+]

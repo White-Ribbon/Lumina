@@ -10,6 +10,8 @@ import SolarSystemDetail from "./pages/SolarSystemDetail";
 import ProjectDetail from "./pages/ProjectDetail";
 import Forums from "./pages/Forums";
 import NewPost from "./pages/NewPost";
+import Profile from "./pages/Profile";
+import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/forums" element={<Forums />} />
           <Route path="/forums/new" element={<NewPost />} />
+          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/search" element={<Search />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

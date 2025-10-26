@@ -3,7 +3,8 @@
     {
       "id": "post-1",
       "title": "My First IoT Project - Smart Plant Monitor",
-      "author": "CosmicCoder",
+      "author_id": "user-1",
+      "hidden_rating": 4.5,
       "body_md": "Just finished building a smart plant monitoring system! 🌱\n\n## Features\n- Real-time soil moisture tracking\n- Automatic watering system\n- Mobile app notifications\n\nCheck out my [GitHub repo](https://github.com/example) for the code!",
       "tags": ["iot", "arduino", "project-showcase"],
       "comments": [
@@ -24,7 +25,8 @@
     {
       "id": "post-2",
       "title": "Built an NFT Gallery with React & Web3",
-      "author": "BlockchainBob",
+      "author_id": "user-2",
+      "hidden_rating": 4.8,
       "body_md": "Finally deployed my NFT gallery dApp! Here's what I learned:\n\n1. Web3 integration is easier than expected\n2. Gas optimization is crucial\n3. UX matters even in crypto\n\n**Live demo**: [nft-gallery.example.com](https://example.com)",
       "tags": ["blockchain", "react", "web3"],
       "comments": []
@@ -34,7 +36,8 @@
     {
       "id": "help-1",
       "title": "Arduino not detecting sensor - Need Help!",
-      "author": "NewbieCoder",
+      "author_id": "user-3",
+      "hidden_rating": 3.2,
       "body_md": "I'm working on a weather station project but my DHT22 sensor isn't being detected.\n\n```cpp\n#include <DHT.h>\nDHT dht(2, DHT22);\n```\n\nThe serial monitor shows `nan` for readings. Any ideas?",
       "tags": ["arduino", "sensors", "debugging"],
       "comments": [

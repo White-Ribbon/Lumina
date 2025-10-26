@@ -1,0 +1,27 @@
+[
+  {
+    "id": "blockchain",
+    "name": "Blockchain Galaxy",
+    "description": "Explore decentralized technologies, smart contracts, and cryptocurrency projects"
+  },
+  {
+    "id": "iot",
+    "name": "IoT Galaxy",
+    "description": "Internet of Things projects with embedded systems and connected devices"
+  },
+  {
+    "id": "ai-ml",
+    "name": "AI & Machine Learning Galaxy",
+    "description": "Artificial Intelligence, Deep Learning, and Data Science projects"
+  },
+  {
+    "id": "web-dev",
+    "name": "Web Development Galaxy",
+    "description": "Modern web applications, frameworks, and full-stack projects"
+  },
+  {
+    "id": "game-dev",
+    "name": "Game Development Galaxy",
+    "description": "Interactive games, game engines, and creative experiences"
+  }
+]

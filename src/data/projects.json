@@ -1,0 +1,76 @@
+[
+  {
+    "id": "smart-home-hub",
+    "solar_system_id": "arduino",
+    "title": "Smart Home Hub",
+    "description": "Build a centralized smart home control system using Arduino to manage lights, temperature, and security sensors",
+    "tags": ["iot", "automation", "sensors"],
+    "difficulty": "Intermediate",
+    "est_time": "2-3 weeks",
+    "resources": [
+      { "title": "Arduino IoT Tutorial", "url": "https://arduino.cc" },
+      { "title": "Home Automation Guide", "url": "https://example.com" }
+    ]
+  },
+  {
+    "id": "weather-station",
+    "solar_system_id": "arduino",
+    "title": "Weather Monitoring Station",
+    "description": "Create a comprehensive weather station that measures temperature, humidity, pressure, and displays data on an LCD",
+    "tags": ["sensors", "data", "lcd"],
+    "difficulty": "Beginner",
+    "est_time": "1 week",
+    "resources": [
+      { "title": "Sensor Integration", "url": "https://arduino.cc" }
+    ]
+  },
+  {
+    "id": "nft-marketplace",
+    "solar_system_id": "ethereum",
+    "title": "NFT Marketplace",
+    "description": "Develop a decentralized marketplace for creating, buying, and selling NFTs on Ethereum",
+    "tags": ["solidity", "web3", "nft"],
+    "difficulty": "Advanced",
+    "est_time": "4-6 weeks",
+    "resources": [
+      { "title": "Solidity Documentation", "url": "https://docs.soliditylang.org" },
+      { "title": "OpenZeppelin Contracts", "url": "https://openzeppelin.com" }
+    ]
+  },
+  {
+    "id": "sentiment-analyzer",
+    "solar_system_id": "nlp",
+    "title": "Social Media Sentiment Analyzer",
+    "description": "Build an NLP model to analyze sentiment in social media posts and generate insights",
+    "tags": ["python", "transformers", "sentiment"],
+    "difficulty": "Intermediate",
+    "est_time": "2 weeks",
+    "resources": [
+      { "title": "Hugging Face Transformers", "url": "https://huggingface.co" }
+    ]
+  },
+  {
+    "id": "task-manager",
+    "solar_system_id": "react",
+    "title": "Real-time Task Manager",
+    "description": "Create a collaborative task management app with real-time updates using React and WebSockets",
+    "tags": ["react", "websockets", "collaboration"],
+    "difficulty": "Intermediate",
+    "est_time": "3 weeks",
+    "resources": [
+      { "title": "React Documentation", "url": "https://react.dev" }
+    ]
+  },
+  {
+    "id": "2d-platformer",
+    "solar_system_id": "unity",
+    "title": "2D Platformer Game",
+    "description": "Design and build a 2D platformer game with physics, collectibles, and multiple levels",
+    "tags": ["unity", "2d", "game-design"],
+    "difficulty": "Beginner",
+    "est_time": "2-3 weeks",
+    "resources": [
+      { "title": "Unity 2D Tutorial", "url": "https://unity.com" }
+    ]
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "arduino",
+    "galaxy_id": "iot",
+    "name": "Arduino Solar System",
+    "description": "Microcontroller projects using Arduino boards",
+    "tags": ["hardware", "embedded", "sensors"]
+  },
+  {
+    "id": "raspberry-pi",
+    "galaxy_id": "iot",
+    "name": "Raspberry Pi Solar System",
+    "description": "Single-board computer projects with Raspberry Pi",
+    "tags": ["linux", "python", "hardware"]
+  },
+  {
+    "id": "ethereum",
+    "galaxy_id": "blockchain",
+    "name": "Ethereum Solar System",
+    "description": "Smart contracts and dApps on Ethereum",
+    "tags": ["solidity", "web3", "defi"]
+  },
+  {
+    "id": "nlp",
+    "galaxy_id": "ai-ml",
+    "name": "Natural Language Processing",
+    "description": "Text processing and language understanding projects",
+    "tags": ["python", "transformers", "nlp"]
+  },
+  {
+    "id": "react",
+    "galaxy_id": "web-dev",
+    "name": "React Solar System",
+    "description": "Modern React applications and component libraries",
+    "tags": ["javascript", "frontend", "ui"]
+  },
+  {
+    "id": "unity",
+    "galaxy_id": "game-dev",
+    "name": "Unity Solar System",
+    "description": "3D and 2D games built with Unity engine",
+    "tags": ["c#", "3d", "mobile"]
+  }
+]

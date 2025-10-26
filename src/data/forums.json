@@ -1,0 +1,50 @@
+{
+  "showcasing": [
+    {
+      "id": "post-1",
+      "title": "My First IoT Project - Smart Plant Monitor",
+      "author": "CosmicCoder",
+      "body_md": "Just finished building a smart plant monitoring system! 🌱\n\n## Features\n- Real-time soil moisture tracking\n- Automatic watering system\n- Mobile app notifications\n\nCheck out my [GitHub repo](https://github.com/example) for the code!",
+      "tags": ["iot", "arduino", "project-showcase"],
+      "comments": [
+        {
+          "id": "c1",
+          "author": "StarBuilder",
+          "body_md": "This is amazing! Love the mobile integration. Did you use MQTT for notifications?",
+          "tag": "Feedback"
+        },
+        {
+          "id": "c2",
+          "author": "GalaxyExplorer",
+          "body_md": "Great work! Have you considered adding light sensors too?",
+          "tag": "General Discussion"
+        }
+      ]
+    },
+    {
+      "id": "post-2",
+      "title": "Built an NFT Gallery with React & Web3",
+      "author": "BlockchainBob",
+      "body_md": "Finally deployed my NFT gallery dApp! Here's what I learned:\n\n1. Web3 integration is easier than expected\n2. Gas optimization is crucial\n3. UX matters even in crypto\n\n**Live demo**: [nft-gallery.example.com](https://example.com)",
+      "tags": ["blockchain", "react", "web3"],
+      "comments": []
+    }
+  ],
+  "help": [
+    {
+      "id": "help-1",
+      "title": "Arduino not detecting sensor - Need Help!",
+      "author": "NewbieCoder",
+      "body_md": "I'm working on a weather station project but my DHT22 sensor isn't being detected.\n\n```cpp\n#include <DHT.h>\nDHT dht(2, DHT22);\n```\n\nThe serial monitor shows `nan` for readings. Any ideas?",
+      "tags": ["arduino", "sensors", "debugging"],
+      "comments": [
+        {
+          "id": "ch1",
+          "author": "HelpfulDev",
+          "body_md": "Check your wiring! DHT22 needs a 10k pullup resistor between data and VCC.",
+          "tag": "Help"
+        }
+      ]
+    }
+  ]
+}

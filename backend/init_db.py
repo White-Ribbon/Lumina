@@ -337,7 +337,7 @@ def create_sample_data():
             "description": "Build a centralized smart home control system using Arduino to manage lights, temperature, and security sensors",
             "tags": ["iot", "automation", "sensors"],
             "difficulty": "Intermediate",
-            "est_time": "2-3 weeks",
+            "estimated_time": "2-3 weeks",
             "resources": [
                 {"title": "Arduino IoT Tutorial", "url": "https://arduino.cc"},
                 {"title": "Home Automation Guide", "url": "https://example.com"}
@@ -355,7 +355,7 @@ def create_sample_data():
             "description": "Develop a decentralized marketplace for creating, buying, and selling NFTs on Ethereum",
             "tags": ["solidity", "web3", "nft"],
             "difficulty": "Advanced",
-            "est_time": "4-6 weeks",
+            "estimated_time": "4-6 weeks",
             "resources": [
                 {"title": "Solidity Documentation", "url": "https://docs.soliditylang.org"},
                 {"title": "OpenZeppelin Contracts", "url": "https://openzeppelin.com"}

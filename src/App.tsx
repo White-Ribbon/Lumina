@@ -17,6 +17,9 @@ import Search from "./pages/Search";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminSubmissions from "./pages/AdminSubmissions";
+import AdminGalaxies from "./pages/AdminGalaxies";
+import AdminSolarSystems from "./pages/AdminSolarSystems";
+import AdminProjects from "./pages/AdminProjects";
 import CommunityProjects from "./pages/CommunityProjects";
 import BackendTest from "./pages/BackendTest";
 import NotFound from "./pages/NotFound";
@@ -45,6 +48,9 @@ const App = () => (
             <Route path="/search" element={<Search />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/submissions" element={<AdminSubmissions />} />
+            <Route path="/admin/galaxies" element={<AdminGalaxies />} />
+            <Route path="/admin/solar-systems" element={<AdminSolarSystems />} />
+            <Route path="/admin/projects" element={<AdminProjects />} />
             <Route path="/community-projects" element={<CommunityProjects />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

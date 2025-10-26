@@ -82,14 +82,14 @@ async def get_projects(
             description=project["description"],
             tags=project["tags"],
             difficulty=project["difficulty"],
-            est_time=project["est_time"],
-            resources=project["resources"],
-            requirements=project["requirements"],
-            learning_objectives=project["learning_objectives"],
-            status=project["status"],
-            created_by=project["created_by"],
-            created_at=project["created_at"],
-            updated_at=project["updated_at"]
+            estimated_time=project.get("estimated_time", project.get("est_time", "1-2 hours")),
+            resources=project.get("resources", []),
+            requirements=project.get("requirements", []),
+            learning_objectives=project.get("learning_objectives", []),
+            status=project.get("status", "approved"),
+            created_by=project.get("created_by"),
+            created_at=project.get("created_at", datetime.utcnow()),
+            updated_at=project.get("updated_at", datetime.utcnow())
         ))
     
     return project_responses
@@ -157,14 +157,14 @@ async def get_project(
         description=project["description"],
         tags=project["tags"],
         difficulty=project["difficulty"],
-        est_time=project["est_time"],
-        resources=project["resources"],
-        requirements=project["requirements"],
-        learning_objectives=project["learning_objectives"],
-        status=project["status"],
-        created_by=project["created_by"],
-        created_at=project["created_at"],
-        updated_at=project["updated_at"]
+        estimated_time=project.get("estimated_time", project.get("est_time", "1-2 hours")),
+        resources=project.get("resources", []),
+        requirements=project.get("requirements", []),
+        learning_objectives=project.get("learning_objectives", []),
+        status=project.get("status", "approved"),
+        created_by=project.get("created_by"),
+        created_at=project.get("created_at", datetime.utcnow()),
+        updated_at=project.get("updated_at", datetime.utcnow())
     )
 
 @router.post("/", response_model=Project)
@@ -195,7 +195,7 @@ async def create_project(
         "description": project_data.description,
         "tags": project_data.tags,
         "difficulty": project_data.difficulty,
-        "est_time": project_data.est_time,
+        "estimated_time": project_data.estimated_time,
         "resources": [resource.dict() for resource in project_data.resources],
         "requirements": project_data.requirements,
         "learning_objectives": project_data.learning_objectives,
@@ -255,8 +255,8 @@ async def update_project(
         update_data["tags"] = project_update.tags
     if project_update.difficulty is not None:
         update_data["difficulty"] = project_update.difficulty
-    if project_update.est_time is not None:
-        update_data["est_time"] = project_update.est_time
+    if project_update.estimated_time is not None:
+        update_data["estimated_time"] = project_update.estimated_time
     if project_update.resources is not None:
         update_data["resources"] = [resource.dict() for resource in project_update.resources]
     if project_update.requirements is not None:
@@ -281,7 +281,7 @@ async def update_project(
         description=updated_project["description"],
         tags=updated_project["tags"],
         difficulty=updated_project["difficulty"],
-        est_time=updated_project["est_time"],
+        estimated_time=updated_project.get("estimated_time", updated_project.get("est_time", "1-2 hours")),
         resources=updated_project["resources"],
         requirements=updated_project["requirements"],
         learning_objectives=updated_project["learning_objectives"],
@@ -357,7 +357,7 @@ async def create_project_idea(
         "solar_system_id": solar_system["hashid"],
         "tags": idea_data.tags,
         "difficulty": idea_data.difficulty,
-        "est_time": idea_data.est_time,
+        "estimated_time": idea_data.estimated_time,
         "resources": [resource.dict() for resource in idea_data.resources],
         "requirements": idea_data.requirements,
         "learning_objectives": idea_data.learning_objectives,
@@ -411,13 +411,15 @@ async def get_project_ideas(
             solar_system_id=idea["solar_system_id"],
             tags=idea["tags"],
             difficulty=idea["difficulty"],
-            est_time=idea["est_time"],
+            estimated_time=idea.get("estimated_time", idea.get("est_time", "1-2 hours")),
             resources=idea["resources"],
             requirements=idea["requirements"],
             learning_objectives=idea["learning_objectives"],
             submitted_by=idea["submitted_by"],
             upvotes=idea["upvotes"],
             status=idea["status"],
+            is_taken=idea.get("is_taken", False),
+            expires_at=idea.get("expires_at", datetime.utcnow()),
             created_at=idea["created_at"],
             updated_at=idea["updated_at"]
         ))
@@ -498,7 +500,7 @@ async def approve_project_idea(
         "description": idea["description"],
         "tags": idea["tags"],
         "difficulty": idea["difficulty"],
-        "est_time": idea["est_time"],
+        "estimated_time": idea.get("estimated_time", idea.get("est_time", "1-2 hours")),
         "resources": idea["resources"],
         "requirements": idea["requirements"],
         "learning_objectives": idea["learning_objectives"],

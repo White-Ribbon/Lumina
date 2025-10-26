@@ -210,17 +210,23 @@ const AdminDashboard = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <Button className="w-full justify-start" variant="outline">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Create New Galaxy
+                      <Button asChild className="w-full justify-start" variant="outline">
+                        <Link to="/admin/galaxies">
+                          <Plus className="mr-2 h-4 w-4" />
+                          Create New Galaxy
+                        </Link>
                       </Button>
-                      <Button className="w-full justify-start" variant="outline">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Create Solar System
+                      <Button asChild className="w-full justify-start" variant="outline">
+                        <Link to="/admin/solar-systems">
+                          <Plus className="mr-2 h-4 w-4" />
+                          Create Solar System
+                        </Link>
                       </Button>
-                      <Button className="w-full justify-start" variant="outline">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Create Project
+                      <Button asChild className="w-full justify-start" variant="outline">
+                        <Link to="/admin/projects">
+                          <Plus className="mr-2 h-4 w-4" />
+                          Create Project
+                        </Link>
                       </Button>
                       <Button asChild className="w-full justify-start" variant="outline">
                         <Link to="/admin/submissions">
@@ -268,17 +274,23 @@ const AdminDashboard = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="grid md:grid-cols-3 gap-4">
-                      <Button className="h-20 flex-col" variant="outline">
-                        <Settings className="h-6 w-6 mb-2" />
-                        Manage Galaxies
+                      <Button asChild className="h-20 flex-col" variant="outline">
+                        <Link to="/admin/galaxies">
+                          <Settings className="h-6 w-6 mb-2" />
+                          Manage Galaxies
+                        </Link>
                       </Button>
-                      <Button className="h-20 flex-col" variant="outline">
-                        <Settings className="h-6 w-6 mb-2" />
-                        Manage Solar Systems
+                      <Button asChild className="h-20 flex-col" variant="outline">
+                        <Link to="/admin/solar-systems">
+                          <Settings className="h-6 w-6 mb-2" />
+                          Manage Solar Systems
+                        </Link>
                       </Button>
-                      <Button className="h-20 flex-col" variant="outline">
-                        <Settings className="h-6 w-6 mb-2" />
-                        Manage Projects
+                      <Button asChild className="h-20 flex-col" variant="outline">
+                        <Link to="/admin/projects">
+                          <Settings className="h-6 w-6 mb-2" />
+                          Manage Projects
+                        </Link>
                       </Button>
                     </div>
                   </CardContent>

@@ -50,6 +50,34 @@ async def get_admin_stats(
     )
 
 # Galaxy CRUD
+@router.get("/galaxies", response_model=PaginatedResponse)
+async def get_galaxies(
+    current_user: User = Depends(get_current_user),
+    db = Depends(get_database)
+):
+    """Get all galaxies (admin only)"""
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    cursor = db.galaxies.find().sort("created_at", -1)
+    galaxies = await cursor.to_list(length=None)
+    
+    # Convert to response format
+    galaxy_responses = []
+    for galaxy in galaxies:
+        galaxy["id"] = str(galaxy["_id"])
+        galaxy_responses.append(Galaxy(**galaxy))
+    
+    return PaginatedResponse(
+        items=galaxy_responses,
+        total=len(galaxy_responses),
+        page=1,
+        size=len(galaxy_responses),
+        pages=1
+    )
 @router.post("/galaxies", response_model=Galaxy)
 async def create_galaxy(
     galaxy: GalaxyCreate,
@@ -130,6 +158,34 @@ async def delete_galaxy(
     return MessageResponse(message="Galaxy deleted successfully")
 
 # Solar System CRUD
+@router.get("/solar-systems", response_model=PaginatedResponse)
+async def get_solar_systems(
+    current_user: User = Depends(get_current_user),
+    db = Depends(get_database)
+):
+    """Get all solar systems (admin only)"""
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    cursor = db.solar_systems.find().sort("created_at", -1)
+    solar_systems = await cursor.to_list(length=None)
+    
+    # Convert to response format
+    solar_system_responses = []
+    for solar_system in solar_systems:
+        solar_system["id"] = str(solar_system["_id"])
+        solar_system_responses.append(SolarSystem(**solar_system))
+    
+    return PaginatedResponse(
+        items=solar_system_responses,
+        total=len(solar_system_responses),
+        page=1,
+        size=len(solar_system_responses),
+        pages=1
+    )
 @router.post("/solar-systems", response_model=SolarSystem)
 async def create_solar_system(
     solar_system: SolarSystemCreate,
@@ -143,10 +199,14 @@ async def create_solar_system(
             detail="Admin access required"
         )
     
+    print(f"Received solar system data: {solar_system.dict()}")
+    
     solar_system_data = solar_system.dict()
     solar_system_data["hashid"] = hashids.encode(int(datetime.utcnow().timestamp()))
     solar_system_data["created_at"] = datetime.utcnow()
     solar_system_data["updated_at"] = datetime.utcnow()
+    
+    print(f"Processed solar system data: {solar_system_data}")
     
     result = await db.solar_systems.insert_one(solar_system_data)
     solar_system_data["id"] = str(result.inserted_id)
@@ -210,6 +270,34 @@ async def delete_solar_system(
     return MessageResponse(message="Solar system deleted successfully")
 
 # Project CRUD
+@router.get("/projects", response_model=PaginatedResponse)
+async def get_projects(
+    current_user: User = Depends(get_current_user),
+    db = Depends(get_database)
+):
+    """Get all projects (admin only)"""
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    cursor = db.projects.find().sort("created_at", -1)
+    projects = await cursor.to_list(length=None)
+    
+    # Convert to response format
+    project_responses = []
+    for project in projects:
+        project["id"] = str(project["_id"])
+        project_responses.append(Project(**project))
+    
+    return PaginatedResponse(
+        items=project_responses,
+        total=len(project_responses),
+        page=1,
+        size=len(project_responses),
+        pages=1
+    )
 @router.post("/projects", response_model=Project)
 async def create_project(
     project: ProjectCreate,
@@ -223,11 +311,15 @@ async def create_project(
             detail="Admin access required"
         )
     
+    print(f"Received project data: {project.dict()}")
+    
     project_data = project.dict()
     project_data["hashid"] = hashids.encode(int(datetime.utcnow().timestamp()))
     project_data["status"] = "approved"
     project_data["created_at"] = datetime.utcnow()
     project_data["updated_at"] = datetime.utcnow()
+    
+    print(f"Processed project data: {project_data}")
     
     result = await db.projects.insert_one(project_data)
     project_data["id"] = str(result.inserted_id)

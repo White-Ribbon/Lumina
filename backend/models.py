@@ -137,8 +137,8 @@ class SolarSystemBase(BaseModel):
     galaxy_id: str
     name: str = Field(..., min_length=1, max_length=100)
     description: str = Field(..., min_length=1, max_length=500)
-    tags: List[str] = []
-    badge_id: str  # The badge earned when completing this solar system
+    tags: List[str] = Field(default_factory=list)
+    badge_id: Optional[str] = None
     icon: Optional[str] = None
     color: Optional[str] = None
 
@@ -173,12 +173,12 @@ class ProjectBase(BaseModel):
     solar_system_id: str
     title: str = Field(..., min_length=1, max_length=200)
     description: str = Field(..., min_length=1, max_length=1000)
-    tags: List[str] = []
-    difficulty: DifficultyLevel
-    est_time: str = Field(..., min_length=1, max_length=50)
-    resources: List[Resource] = []
-    requirements: List[str] = []
-    learning_objectives: List[str] = []
+    tags: List[str] = Field(default_factory=list)
+    difficulty: Optional[str] = "beginner"
+    estimated_time: Optional[str] = "1-2 hours"
+    resources: List[Resource] = Field(default_factory=list)
+    requirements: List[str] = Field(default_factory=list)
+    learning_objectives: List[str] = Field(default_factory=list)
 
 class ProjectCreate(ProjectBase):
     pass
@@ -187,8 +187,8 @@ class ProjectUpdate(BaseModel):
     title: Optional[str] = Field(None, min_length=1, max_length=200)
     description: Optional[str] = Field(None, min_length=1, max_length=1000)
     tags: Optional[List[str]] = None
-    difficulty: Optional[DifficultyLevel] = None
-    est_time: Optional[str] = Field(None, min_length=1, max_length=50)
+    difficulty: Optional[str] = None
+    estimated_time: Optional[str] = Field(None, min_length=1, max_length=50)
     resources: Optional[List[Resource]] = None
     requirements: Optional[List[str]] = None
     learning_objectives: Optional[List[str]] = None
@@ -216,7 +216,7 @@ class ProjectIdeaBase(BaseModel):
     solar_system_id: str
     tags: List[str] = []
     difficulty: DifficultyLevel
-    est_time: str = Field(..., min_length=1, max_length=50)
+    estimated_time: str = Field(..., min_length=1, max_length=50)
     resources: List[Resource] = []
     requirements: List[str] = []
     learning_objectives: List[str] = []

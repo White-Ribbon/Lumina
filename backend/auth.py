@@ -25,12 +25,41 @@ security = HTTPBearer()
 hashids = Hashids(salt=SECRET_KEY, min_length=8)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash"""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verify a password against its hash.
+
+    bcrypt has a 72-byte limit for passwords. To avoid ValueError from the
+    underlying bcrypt implementation (which can occur with long passwords or
+    incompatible bcrypt builds), we truncate the UTF-8 encoded bytes to 72
+    bytes before hashing/verification. This ensures consistent behavior in
+    environments like Render where bcrypt may be sensitive to length.
+    """
+    # Truncate to 72 bytes to be safe for bcrypt
+    try:
+        encoded = plain_password.encode("utf-8")
+    except Exception:
+        # Fallback: ensure we have a str
+        encoded = str(plain_password).encode("utf-8")
+
+    if len(encoded) > 72:
+        encoded = encoded[:72]
+
+    truncated = encoded.decode("utf-8", errors="ignore")
+    return pwd_context.verify(truncated, hashed_password)
 
 def get_password_hash(password: str) -> str:
-    """Hash a password"""
-    return pwd_context.hash(password)
+    """Hash a password, truncating to bcrypt's 72-byte limit to avoid
+    backend errors on environments with strict bcrypt implementations.
+    """
+    try:
+        encoded = password.encode("utf-8")
+    except Exception:
+        encoded = str(password).encode("utf-8")
+
+    if len(encoded) > 72:
+        encoded = encoded[:72]
+
+    truncated = encoded.decode("utf-8", errors="ignore")
+    return pwd_context.hash(truncated)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Create a JWT access token"""

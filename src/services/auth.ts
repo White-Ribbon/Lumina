@@ -1,8 +1,9 @@
 import { API_ENDPOINTS } from '../config/api';
+import API_BASE_URL from '../config/api';
 import { LoginRequest, RegisterRequest, AuthTokens, User } from '../types/auth';
 
 class AuthService {
-  private baseURL = 'http://localhost:8000';
+  private baseURL = API_BASE_URL;
 
   // Helper method to get auth headers
   private getAuthHeaders(): HeadersInit {

@@ -1,8 +1,9 @@
 import { API_ENDPOINTS } from '../config/api';
+import API_BASE_URL from '../config/api';
 import { authService } from './auth';
 
 class ApiService {
-  private baseURL = 'http://localhost:8000';
+  private baseURL = API_BASE_URL;
 
   // Helper method to get auth headers
   private async getAuthHeaders(): Promise<HeadersInit> {

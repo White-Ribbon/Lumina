@@ -33,7 +33,6 @@ interface ProjectIdea {
   difficulty: string;
   est_time: string;
   submitted_by: string;
-  upvotes: number;
   status: string;
   is_taken: boolean;
   expires_at: string;
@@ -103,11 +102,7 @@ const CommunityProjects = () => {
         vote_type: 'upvote',
       });
 
-      setIdeas(ideas.map(idea => 
-        idea.hashid === ideaId 
-          ? { ...idea, upvotes: response.upvotes }
-          : idea
-      ));
+      // Vote recorded successfully, no need to update UI counts
 
       toast({
         title: "Vote Recorded",
@@ -130,33 +125,30 @@ const CommunityProjects = () => {
   };
 
   const filteredIdeas = ideas.filter(idea => {
+    const isExpired = new Date(idea.expires_at) < new Date();
+    const isExpiringSoon = new Date(idea.expires_at) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+    
     const matchesFilter = filter === 'all' || 
-                         (filter === 'popular' && idea.upvotes >= 5) ||
                          (filter === 'recent' && new Date(idea.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) ||
-                         (filter === 'expiring' && new Date(idea.expires_at) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000));
+                         (filter === 'expiring' && isExpiringSoon && !isExpired);
     
     const matchesSearch = !searchQuery || 
                          idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          idea.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          idea.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     
-    return matchesFilter && matchesSearch;
+    // Don't show expired ideas unless explicitly requested
+    return matchesFilter && matchesSearch && !isExpired;
   });
 
   const sortedIdeas = filteredIdeas.sort((a, b) => {
-    if (filter === 'popular') {
-      return b.upvotes - a.upvotes;
-    }
     if (filter === 'recent') {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
     if (filter === 'expiring') {
       return new Date(a.expires_at).getTime() - new Date(b.expires_at).getTime();
     }
-    // Default: sort by upvotes then by date
-    if (b.upvotes !== a.upvotes) {
-      return b.upvotes - a.upvotes;
-    }
+    // Default: sort by creation date
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
@@ -219,7 +211,6 @@ const CommunityProjects = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Ideas</SelectItem>
-                <SelectItem value="popular">Popular (5+ votes)</SelectItem>
                 <SelectItem value="recent">Recent (7 days)</SelectItem>
                 <SelectItem value="expiring">Expiring Soon</SelectItem>
               </SelectContent>
@@ -315,11 +306,19 @@ const CommunityProjects = () => {
                           className="flex items-center gap-1"
                         >
                           <ArrowUp className="w-4 h-4" />
-                          {idea.upvotes}
+                          Upvote
                         </Button>
 
                         <div className="text-xs text-muted-foreground">
-                          Expires: {new Date(idea.expires_at).toLocaleDateString()}
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            <span>Expires: {new Date(idea.expires_at).toLocaleDateString()}</span>
+                          </div>
+                          {new Date(idea.expires_at) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) && (
+                            <Badge variant="destructive" className="text-xs mt-1">
+                              Expires Soon!
+                            </Badge>
+                          )}
                         </div>
                       </div>
 

@@ -8,6 +8,7 @@ from models import (
 from database import get_database
 from auth import get_current_user
 from hashids import Hashids
+from ranking import rank_project_ideas
 import os
 
 router = APIRouter()
@@ -42,31 +43,37 @@ async def get_project_ideas(
     size: int = Query(20, ge=1, le=100),
     solar_system_id: Optional[str] = None,
     status: Optional[str] = None,
+    include_expired: bool = Query(False, description="Include expired project ideas"),
     db = Depends(get_database)
 ):
     """Get project ideas with filtering and pagination"""
     query = {}
     
-    # Only show non-expired ideas
-    query["expires_at"] = {"$gt": datetime.utcnow()}
+    # Only show non-expired ideas by default (unless explicitly requested)
+    if not include_expired:
+        query["expires_at"] = {"$gt": datetime.utcnow()}
+        # Also exclude expired status
+        query["status"] = {"$ne": "expired"}
     
     if solar_system_id:
         query["solar_system_id"] = solar_system_id
     
-    if status:
+    if status and status != "all":
         query["status"] = status
     
     skip = (page - 1) * size
     total = await db.project_ideas.count_documents(query)
     
-    # Sort by upvotes (descending) and creation date (descending)
-    cursor = db.project_ideas.find(query).skip(skip).limit(size).sort([
-        ("upvotes", -1),
-        ("created_at", -1)
-    ])
+    # Get all matching ideas first
+    cursor = db.project_ideas.find(query)
+    all_ideas = await cursor.to_list(length=None)
     
+    # Apply ranking algorithm
+    ranked_ideas = rank_project_ideas(all_ideas)
+    
+    # Apply pagination after ranking
     ideas = []
-    async for idea in cursor:
+    for idea in ranked_ideas[skip:skip + size]:
         idea["id"] = str(idea["_id"])
         ideas.append(ProjectIdea(**idea))
     
@@ -182,3 +189,4 @@ async def get_user_project_ideas(
         ideas.append(ProjectIdea(**idea))
     
     return ideas
+

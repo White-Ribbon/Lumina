@@ -36,9 +36,6 @@ interface Post {
   category: string;
   author_id: string;
   comments: string[];
-  upvotes: number;
-  downvotes: number;
-  flags: number;
   is_removed: boolean;
   created_at: string;
   updated_at: string;
@@ -107,14 +104,7 @@ const PostDetail = () => {
         vote_type: voteType,
       });
 
-      if (post) {
-        setPost({
-          ...post,
-          upvotes: response.upvotes,
-          downvotes: response.downvotes,
-          flags: response.flags,
-        });
-      }
+      // Vote recorded successfully, no need to update UI counts
 
       toast({
         title: "Vote Recorded",
@@ -266,7 +256,7 @@ const PostDetail = () => {
                       className="flex items-center gap-1"
                     >
                       <ArrowUp className="w-4 h-4" />
-                      {post.upvotes}
+                      Upvote
                     </Button>
                     <Button
                       variant="outline"
@@ -276,7 +266,7 @@ const PostDetail = () => {
                       className="flex items-center gap-1"
                     >
                       <ArrowDown className="w-4 h-4" />
-                      {post.downvotes}
+                      Downvote
                     </Button>
                   </div>
                   
@@ -288,7 +278,7 @@ const PostDetail = () => {
                     className="flex items-center gap-1"
                   >
                     <Flag className="w-4 h-4" />
-                    Flag ({post.flags})
+                    Flag
                   </Button>
 
                   <div className="flex items-center gap-1 text-sm text-muted-foreground ml-auto">

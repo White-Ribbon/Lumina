@@ -305,10 +305,10 @@ class Post(PostBase):
     hashid: str
     author_id: str
     comments: List[str] = []
-    upvotes: int
-    downvotes: int
-    flags: int
-    is_removed: bool
+    upvotes: int = 0
+    downvotes: int = 0
+    flags: int = 0
+    is_removed: bool = False
     created_at: datetime
     updated_at: datetime
 
@@ -394,7 +394,7 @@ class RefreshTokenRequest(BaseModel):
 class VoteRequest(BaseModel):
     post_id: Optional[str] = None
     project_idea_id: Optional[str] = None
-    vote_type: str = Field(..., regex="^(upvote|downvote|flag)$")
+    vote_type: str = Field(..., pattern="^(upvote|downvote|flag)$")
 
 class VoteResponse(BaseModel):
     success: bool

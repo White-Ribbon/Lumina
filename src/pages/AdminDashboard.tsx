@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Users, 
@@ -221,9 +222,11 @@ const AdminDashboard = () => {
                         <Plus className="mr-2 h-4 w-4" />
                         Create Project
                       </Button>
-                      <Button className="w-full justify-start" variant="outline">
-                        <Eye className="mr-2 h-4 w-4" />
-                        Review Submissions
+                      <Button asChild className="w-full justify-start" variant="outline">
+                        <Link to="/admin/submissions">
+                          <Eye className="mr-2 h-4 w-4" />
+                          Review Submissions
+                        </Link>
                       </Button>
                     </CardContent>
                   </Card>

@@ -2,60 +2,11 @@ from fastapi import APIRouter, HTTPException, status, Depends, Query
 from models import Post, PostCreate, PostUpdate, Comment, CommentCreate, MessageResponse, PaginatedResponse
 from auth import get_current_active_user, get_current_admin_user, generate_hashid
 from database import get_database
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Optional
+from ranking import rank_posts
 
 router = APIRouter()
-
-@router.get("/{post_id}", response_model=Post)
-async def get_post(
-    post_id: str,
-    database = Depends(get_database),
-    current_user = Depends(get_current_active_user)
-):
-    """Get a specific post with its comments"""
-    post = await database.posts.find_one({"hashid": post_id})
-    if not post:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Post not found"
-        )
-    
-    # Get comments for this post
-    comments_cursor = database.comments.find({"post_id": post_id}).sort("created_at", 1)
-    comments = await comments_cursor.to_list(length=None)
-    
-    # Convert comments to response format
-    comment_responses = []
-    for comment in comments:
-        comment_responses.append(Comment(
-            id=str(comment["_id"]),
-            hashid=comment["hashid"],
-            body_md=comment["body_md"],
-            tag=comment.get("tag"),
-            author_id=comment["author_id"],
-            post_id=comment["post_id"],
-            created_at=comment["created_at"],
-            updated_at=comment["updated_at"]
-        ))
-    
-    # Return post with comments
-    return Post(
-        id=str(post["_id"]),
-        hashid=post["hashid"],
-        title=post["title"],
-        body_md=post["body_md"],
-        tags=post["tags"],
-        category=post["category"],
-        author_id=post["author_id"],
-        comments=[c.hashid for c in comment_responses],  # Just the comment IDs
-        upvotes=post.get("upvotes", 0),
-        downvotes=post.get("downvotes", 0),
-        flags=post.get("flags", 0),
-        is_removed=post.get("is_removed", False),
-        created_at=post["created_at"],
-        updated_at=post["updated_at"]
-    )
 
 @router.get("/", response_model=PaginatedResponse)
 async def get_posts(
@@ -90,9 +41,12 @@ async def get_posts(
     cursor = database.posts.find(query).sort("created_at", -1).skip(skip).limit(size)
     posts = await cursor.to_list(length=size)
     
+    # Apply ranking algorithm
+    ranked_posts = rank_posts(posts)
+    
     # Convert to response format
     post_responses = []
-    for post in posts:
+    for post in ranked_posts:
         post_responses.append(Post(
             id=str(post["_id"]),
             hashid=post["hashid"],
@@ -102,7 +56,10 @@ async def get_posts(
             category=post["category"],
             author_id=post["author_id"],
             comments=post["comments"],
-            upvotes=post["upvotes"],
+            upvotes=post.get("upvotes", 0),
+            downvotes=post.get("downvotes", 0),
+            flags=post.get("flags", 0),
+            is_removed=post.get("is_removed", False),
             created_at=post["created_at"],
             updated_at=post["updated_at"]
         ))
@@ -144,8 +101,11 @@ async def get_post(
         tags=post["tags"],
         category=post["category"],
         author_id=post["author_id"],
-        comments=post["comments"],
-        upvotes=post["upvotes"],
+        comments=post.get("comments", []),
+        upvotes=post.get("upvotes", 0),
+        downvotes=post.get("downvotes", 0),
+        flags=post.get("flags", 0),
+        is_removed=post.get("is_removed", False),
         created_at=post["created_at"],
         updated_at=post["updated_at"]
     )
@@ -166,7 +126,12 @@ async def create_post(
         "author_id": current_user.hashid,
         "comments": [],
         "upvotes": 0,
+        "downvotes": 0,
         "upvoted_by": [],
+        "downvoted_by": [],
+        "flags": 0,
+        "flagged_by": [],
+        "is_removed": False,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
@@ -244,8 +209,11 @@ async def update_post(
         tags=updated_post["tags"],
         category=updated_post["category"],
         author_id=updated_post["author_id"],
-        comments=updated_post["comments"],
-        upvotes=updated_post["upvotes"],
+        comments=updated_post.get("comments", []),
+        upvotes=updated_post.get("upvotes", 0),
+        downvotes=updated_post.get("downvotes", 0),
+        flags=updated_post.get("flags", 0),
+        is_removed=updated_post.get("is_removed", False),
         created_at=updated_post["created_at"],
         updated_at=updated_post["updated_at"]
     )

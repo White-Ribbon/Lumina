@@ -11,6 +11,7 @@ from models import (
     User, UserInDB,
     AdminStats, PaginatedResponse, MessageResponse
 )
+from cleanup_expired import cleanup_expired_project_ideas
 from database import get_database
 from auth import get_current_user
 from hashids import Hashids
@@ -438,3 +439,24 @@ async def review_submission(
     updated_submission["id"] = str(updated_submission["_id"])
     
     return Submission(**updated_submission)
+
+@router.post("/cleanup-expired", response_model=MessageResponse)
+async def cleanup_expired_ideas(
+    current_user: User = Depends(get_current_user),
+    db = Depends(get_database)
+):
+    """Manually trigger cleanup of expired project ideas (admin only)"""
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    try:
+        await cleanup_expired_project_ideas()
+        return MessageResponse(message="Expired project ideas cleanup completed successfully")
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Cleanup failed: {str(e)}"
+        )

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { useForumPosts } from "@/hooks/useApi";
+import { useForumPosts, useApi } from "@/hooks/useApi";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Forums = () => {
@@ -155,11 +155,11 @@ const Forums = () => {
           )}
         </div>
 
-        <Tabs defaultValue="showcasing" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
-            <TabsTrigger value="showcasing">Project Showcasing</TabsTrigger>
-            <TabsTrigger value="help">Help with Projects</TabsTrigger>
-          </TabsList>
+                <Tabs defaultValue="showcasing" className="w-full" onValueChange={setActiveTab}>
+                  <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
+                    <TabsTrigger value="showcasing">Project Showcasing</TabsTrigger>
+                    <TabsTrigger value="help">Help with Projects</TabsTrigger>
+                  </TabsList>
 
           <TabsContent value="showcasing">
             <div className="max-w-4xl">
@@ -207,8 +207,8 @@ const Forums = () => {
                 </div>
               )}
             </div>
-          </TabsContent>
-        </Tabs>
+                  </TabsContent>
+                </Tabs>
       </main>
 
       <Footer />

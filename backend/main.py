@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Cosmic Project Forge API",
+    title="Lumina API",
     description="Backend API for the e-learning social media platform",
     version="1.0.0",
     lifespan=lifespan

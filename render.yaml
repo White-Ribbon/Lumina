@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: cosmic-project-forge-backend
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && python main.py"
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.1
+      - key: PORT
+        value: 8000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: JWT_REFRESH_SECRET_KEY
+        sync: false

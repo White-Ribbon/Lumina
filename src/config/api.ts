@@ -1,5 +1,10 @@
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// For production: Set VITE_API_BASE_URL in Vercel environment variables
+// Example: https://cosmic-project-forge-backend.onrender.com
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (import.meta.env.PROD 
+    ? 'https://cosmic-project-forge-backend.onrender.com'  // Update this after Render deployment
+    : 'http://localhost:8000');
 
 export const API_ENDPOINTS = {
   AUTH: {

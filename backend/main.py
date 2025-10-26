@@ -66,4 +66,5 @@ app.include_router(voting.router, prefix="/api/voting", tags=["voting"])
 app.include_router(project_ideas.router, prefix="/api/project-ideas", tags=["project-ideas"])
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

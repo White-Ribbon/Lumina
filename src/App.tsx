@@ -22,6 +22,7 @@ import AdminSolarSystems from "./pages/AdminSolarSystems";
 import AdminProjects from "./pages/AdminProjects";
 import CommunityProjects from "./pages/CommunityProjects";
 import BackendTest from "./pages/BackendTest";
+import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/admin/solar-systems" element={<AdminSolarSystems />} />
             <Route path="/admin/projects" element={<AdminProjects />} />
             <Route path="/community-projects" element={<CommunityProjects />} />
+            <Route path="/chat" element={<ChatPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

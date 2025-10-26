@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Sparkles, Search as SearchIcon, User, LogOut, Settings } from "lucide-react";
+import { Sparkles, Search as SearchIcon, User, LogOut, Settings, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -65,6 +65,10 @@ const Header = () => {
             </Link>
             <Link to="/community-projects" className="hover:text-primary transition-colors hidden sm:inline">
               Ideas
+            </Link>
+            <Link to="/chat" className="hover:text-primary transition-colors hidden sm:inline-flex items-center gap-1">
+              <MessageCircle className="w-4 h-4" />
+              Chat
             </Link>
             
             {isAuthenticated ? (

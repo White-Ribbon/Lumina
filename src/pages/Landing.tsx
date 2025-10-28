@@ -22,13 +22,6 @@ const Landing = () => {
               transition={{ duration: 0.8 }}
               className="text-center max-w-4xl mx-auto"
             >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="inline-block mb-6"
-              >
-                <Sparkles className="w-16 h-16 text-primary" />
-              </motion.div>
               
               <h1 className="text-5xl md:text-7xl font-bold mb-6">
                 Explore the <span className="glow-text">Universe</span> of Projects
@@ -68,7 +61,7 @@ const Landing = () => {
               className="text-center mb-12"
             >
               <h2 className="text-4xl font-bold mb-4">
-                Navigate the <span className="glow-text">Cosmos</span>
+                Navigate the <span className="text-secondary">Cosmos</span>
               </h2>
               <p className="text-muted-foreground text-lg">
                 Your journey through technology, organized beautifully
@@ -105,7 +98,7 @@ const Landing = () => {
                     <item.icon className="w-8 h-8 text-primary" />
                   </div>
                   <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
+                  <p className="text-muted">{item.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -122,9 +115,9 @@ const Landing = () => {
                 viewport={{ once: true }}
               >
                 <h2 className="text-3xl font-bold mb-4">
-                  Learn. Build. <span className="glow-text">Share.</span>
+                  Learn. Build. <span className="text-secondary">Share.</span>
                 </h2>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-muted mb-6">
                   Each project comes with detailed guides, learning resources, and a community 
                   ready to help you succeed. Submit your own implementations and showcase your work.
                 </p>
@@ -137,7 +130,7 @@ const Landing = () => {
                     "Submit your GitHub repos and READMEs"
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-2">
-                      <Lightbulb className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <Lightbulb className="w-5 h-5 text-foreground mt-0.5 flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -169,7 +162,7 @@ const Landing = () => {
               <h2 className="text-4xl font-bold mb-4">
                 Ready to Start Your Journey?
               </h2>
-              <p className="text-muted-foreground mb-8 text-lg">
+              <p className="text-muted mb-8 text-lg">
                 Thousands of projects waiting to be discovered
               </p>
               <Button asChild size="lg" className="cosmic-button text-lg px-10">

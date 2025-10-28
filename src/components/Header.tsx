@@ -39,8 +39,13 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <nav className="flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2 text-2xl font-bold group flex-shrink-0">
-            <Sparkles className="w-6 h-6 text-primary group-hover:animate-float" />
-            <span className="glow-text hidden sm:inline">Lumina</span>
+            <img
+              src="/logo.png"
+              alt="Lumina Logo"
+              width={40}
+              className="hover:opacity-80 transition-opacity duration-500"
+            />
+            <span className="hidden sm:inline">Lumina</span>
           </Link>
           
           <form onSubmit={handleSearch} className="flex-1 max-w-md">
@@ -51,7 +56,7 @@ const Header = () => {
                 placeholder="Search projects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-muted/30"
+                className="pl-10 bg-muted text-muted-foreground"
               />
             </div>
           </form>

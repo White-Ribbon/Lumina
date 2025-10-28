@@ -124,7 +124,7 @@ const N8nChat = () => {
       {!isOpen && (
         <Button
           onClick={toggleChat}
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 z-50 transition-transform hover:scale-110"
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-to-r from-primary to-secondary text-foreground z-50 transition-transform hover:scale-110"
           aria-label="Open chat"
         >
           <MessageCircle className="h-6 w-6" />
@@ -134,7 +134,7 @@ const N8nChat = () => {
       {/* Chat Window */}
       {isOpen && (
         <Card
-          className={`fixed bottom-6 right-6 shadow-2xl border-2 border-purple-200 dark:border-purple-800 z-50 transition-all duration-300 ${
+          className={`fixed bottom-6 right-6 shadow-2xl border-2 border-border z-50 transition-all duration-300 ${
             isMinimized ? 'h-14 w-80' : 'h-[600px] w-[400px]'
           }`}
           style={{
@@ -143,9 +143,9 @@ const N8nChat = () => {
           }}
         >
           {/* Chat Header */}
-          <div className="flex items-center justify-between p-3 border-b bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-t-lg">
+          <div className="flex items-center justify-between p-3 border-b bg-gradient-to-r from-primary/10 to-secondary/10 rounded-t-lg">
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
+              <div className="h-3 w-3 rounded-full bg-green animate-pulse" />
               <span className="font-semibold text-sm">Chat Support</span>
             </div>
             <div className="flex items-center gap-1">
@@ -187,7 +187,7 @@ const N8nChat = () => {
 
           {/* Chat Content */}
           {!isMinimized && (
-            <div className="flex flex-col h-[calc(100%-52px)]">
+              <div className="flex flex-col h-[calc(100%-52px)]">
               {/* Messages Area */}
               <ScrollArea className="flex-1 p-4" ref={scrollRef}>
                 <div className="space-y-4">
@@ -199,8 +199,8 @@ const N8nChat = () => {
                       <div
                         className={`max-w-[85%] rounded-lg p-3 ${
                           message.role === 'user'
-                            ? 'bg-purple-600 text-white'
-                            : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                            ? 'bg-secondary text-foreground'
+                            : 'bg-card/10 text-card-foreground'
                         }`}
                       >
                         {message.role === 'user' ? (
@@ -213,8 +213,8 @@ const N8nChat = () => {
                         <p
                           className={`text-xs mt-1 ${
                             message.role === 'user'
-                              ? 'text-purple-200'
-                              : 'text-gray-500 dark:text-gray-400'
+                              ? 'text-secondary/70'
+                              : 'text-muted-foreground/70'
                           }`}
                         >
                           {message.timestamp.toLocaleTimeString()}
@@ -225,10 +225,10 @@ const N8nChat = () => {
 
                   {isLoading && (
                     <div className="flex justify-start">
-                      <div className="max-w-[85%] rounded-lg p-3 bg-gray-100 dark:bg-gray-800">
+                      <div className="max-w-[85%] rounded-lg p-3 bg-card/10">
                         <div className="flex items-center gap-2">
-                          <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
-                          <p className="text-sm text-gray-600 dark:text-gray-300">Typing...</p>
+                          <Loader2 className="w-4 h-4 animate-spin text-secondary" />
+                          <p className="text-sm text-muted-foreground">Typing...</p>
                         </div>
                       </div>
                     </div>
@@ -237,7 +237,7 @@ const N8nChat = () => {
               </ScrollArea>
 
               {/* Input Area */}
-              <div className="border-t p-3 bg-gray-50 dark:bg-gray-900/50">
+              <div className="border-t p-3 bg-card/5">
                 <div className="flex gap-2">
                   <Input
                     placeholder="Type your message..."
@@ -251,7 +251,7 @@ const N8nChat = () => {
                     onClick={sendMessage}
                     disabled={!input.trim() || isLoading}
                     size="icon"
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                    className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
                   >
                     {isLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />

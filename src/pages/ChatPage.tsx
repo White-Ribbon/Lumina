@@ -98,37 +98,28 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-blue-900/20">
+    <div className="min-h-screen">
       <Header />
       
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <MessageCircle className="w-10 h-10 text-purple-400" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              AI Chat Assistant
+            <MessageCircle className="w-10 h-10 text-secondary" />
+            <h1 className="text-4xl font-bold glow-text">
+              Lumine
             </h1>
           </div>
-          <p className="text-lg text-gray-300">
-            Get instant help with your questions and project ideas
+          <p className="text-lg text-muted">
+            Your AI assistant for project ideas with a plan
           </p>
         </div>
 
         {/* Chat Container */}
-        <Card className="shadow-2xl border-2 border-purple-800 h-[calc(100vh-300px)] min-h-[600px] flex flex-col">
-          <CardHeader className="border-b bg-gradient-to-r from-purple-900/30 to-pink-900/30 flex-shrink-0">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
-                  Chat Assistant
-                </CardTitle>
-                <CardDescription>
-                  Ask me anything - I'm here to help!
-                </CardDescription>
-              </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">
+        <Card className="shadow-2xl border-2 border-border h-[calc(100vh-300px)] min-h-[800px] flex flex-col">
+          <CardHeader className="border-b bg-primary rounded-sm flex-shrink-0">
+            <div className="flex items-center justify-between text-center">
+              <div className="text-xs text-muted ">
                 Session: {sessionId.slice(-8)}
               </div>
             </div>
@@ -146,22 +137,22 @@ export default function ChatPage() {
                     <div
                       className={`max-w-[85%] rounded-lg p-4 ${
                         message.role === 'user'
-                          ? 'bg-purple-600 text-white'
-                          : 'bg-gray-800 text-gray-100'
+                          ? 'bg-foreground text-primary'
+                          : 'bg-secondary text-card-foreground '
                       }`}
                     >
                       {message.role === 'user' ? (
                         <p className="whitespace-pre-wrap">{message.content}</p>
                       ) : (
-                        <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <div className="prose-invert max-w-none">
                           <MarkdownViewer content={message.content} />
                         </div>
                       )}
                       <p
                         className={`text-xs mt-2 ${
                           message.role === 'user'
-                            ? 'text-purple-200'
-                            : 'text-gray-400'
+                            ? 'text-secondary/70'
+                            : 'text-muted-foreground/70'
                         }`}
                       >
                         {message.timestamp.toLocaleTimeString()}
@@ -172,10 +163,10 @@ export default function ChatPage() {
 
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="max-w-[85%] rounded-lg p-4 bg-gray-800">
+                    <div className="max-w-[85%] rounded-lg p-4 bg-card/10">
                       <div className="flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
-                        <p className="text-gray-300">
+                        <Loader2 className="w-4 h-4 animate-spin text-secondary" />
+                        <p className="text-muted-foreground">
                           AI is thinking...
                         </p>
                       </div>
@@ -186,7 +177,7 @@ export default function ChatPage() {
             </ScrollArea>
 
             {/* Input Area */}
-            <div className="border-t p-4 bg-gray-900/50 flex-shrink-0">
+            <div className="border-t p-4 bg-card/5 flex-shrink-0">
               <div className="flex gap-2">
                 <Input
                   placeholder="Type your message here... (Press Enter to send)"
@@ -199,7 +190,7 @@ export default function ChatPage() {
                 <Button
                   onClick={sendMessage}
                   disabled={!input.trim() || isLoading}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6"
+                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 px-6"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -211,7 +202,7 @@ export default function ChatPage() {
                   )}
                 </Button>
               </div>
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 Press Enter to send • Supports markdown formatting
               </p>
             </div>
@@ -220,34 +211,34 @@ export default function ChatPage() {
 
         {/* Info Section */}
         <div className="grid md:grid-cols-3 gap-4 mt-8">
-          <Card className="border-purple-800">
+          <Card className="border-border">
             <CardHeader>
               <CardTitle className="text-sm">💬 Natural Conversation</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Chat naturally with our AI assistant that understands context
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-purple-800">
+          <Card className="border-border">
             <CardHeader>
               <CardTitle className="text-sm">📝 Markdown Support</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Responses are beautifully formatted with code, lists, and more
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-purple-800">
+          <Card className="border-border">
             <CardHeader>
               <CardTitle className="text-sm">🔒 Secure & Private</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Your conversations are secure with session-based tracking
               </p>
             </CardContent>
